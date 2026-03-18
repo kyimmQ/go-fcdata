@@ -16,15 +16,15 @@ This document defines the coding standards, conventions, and best practices for 
 
 ### Naming Conventions
 
-| Element | Convention | Example |
-|---------|------------|---------|
-| Package | Lowercase, short | `client`, `signalr`, `models` |
-| Types (structs) | PascalCase | `FCDataClient`, `Client` |
-| Functions | PascalCase | `GetSecuritiesList`, `Login` |
-| Methods | PascalCase | `doRequest`, `SetToken` |
-| Variables | CamelCase | `httpClient`, `baseURL` |
-| Constants | PascalCase or CamelCase | `DefaultBaseURL`, `hubName` |
-| Private fields | CamelCase | `connToken`, `messageID` |
+| Element         | Convention              | Example                       |
+| --------------- | ----------------------- | ----------------------------- |
+| Package         | Lowercase, short        | `client`, `signalr`, `models` |
+| Types (structs) | PascalCase              | `FCDataClient`, `Client`      |
+| Functions       | PascalCase              | `GetSecuritiesList`, `Login`  |
+| Methods         | PascalCase              | `doRequest`, `SetToken`       |
+| Variables       | CamelCase               | `httpClient`, `baseURL`       |
+| Constants       | PascalCase or CamelCase | `DefaultBaseURL`, `hubName`   |
+| Private fields  | CamelCase               | `connToken`, `messageID`      |
 
 ### File Organization
 
@@ -42,11 +42,12 @@ import (
     "net/url"
 
     "github.com/gorilla/websocket"
-    "github.com/kyimmQ/go_fcdata/models"
+    "github.com/kyimmQ/go-fcdata/models"
 )
 ```
 
 Order:
+
 1. Standard library (alphabetical)
 2. External packages
 3. Project packages
@@ -227,9 +228,9 @@ const (
 
 Document required environment variables:
 
-| Variable | Description |
-|----------|-------------|
-| `ConsumerID` | SSI API Consumer ID |
+| Variable         | Description             |
+| ---------------- | ----------------------- |
+| `ConsumerID`     | SSI API Consumer ID     |
 | `ConsumerSecret` | SSI API Consumer Secret |
 
 ---
@@ -257,7 +258,7 @@ func (c *FCDataClient) Login(consumerID, consumerSecret string) (string, error)
 
 ### Semantic Importing
 
-- Module path: `github.com/kyimmQ/go_fcdata`
+- Module path: `github.com/kyimmQ/go-fcdata`
 - Go version declared in `go.mod`
 
 ---

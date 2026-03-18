@@ -8,9 +8,9 @@ import (
 	"syscall"
 
 	"github.com/joho/godotenv"
-	"github.com/kyimmQ/go_fcdata/client"
-	"github.com/kyimmQ/go_fcdata/models"
-	"github.com/kyimmQ/go_fcdata/signalr"
+	"github.com/kyimmQ/go-fcdata/client"
+	"github.com/kyimmQ/go-fcdata/models"
+	"github.com/kyimmQ/go-fcdata/signalr"
 )
 
 func main() {

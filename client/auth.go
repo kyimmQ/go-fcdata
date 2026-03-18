@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 
-	"github.com/kyimmQ/go_fcdata/models"
+	"github.com/kyimmQ/go-fcdata/models"
 )
 
 const AccessTokenEndpoint = "api/v2/Market/AccessToken"

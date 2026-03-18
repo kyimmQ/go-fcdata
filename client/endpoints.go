@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/kyimmQ/go_fcdata/models"
+	"github.com/kyimmQ/go-fcdata/models"
 )
 
 const (

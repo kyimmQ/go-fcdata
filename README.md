@@ -16,7 +16,7 @@ go-fcdata provides a Go client for accessing Vietnamese stock market data throug
 ## Installation
 
 ```bash
-go get github.com/kyimmQ/go_fcdata
+go get github.com/kyimmQ/go-fcdata
 ```
 
 ## Quick Start
@@ -28,7 +28,7 @@ import (
     "fmt"
     "os"
 
-    "github.com/kyimmQ/go_fcdata/client"
+    "github.com/kyimmQ/go-fcdata/client"
 )
 
 func main() {
@@ -56,9 +56,9 @@ func main() {
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `ConsumerID` | SSI FCData API Consumer ID |
+| Variable         | Description                    |
+| ---------------- | ------------------------------ |
+| `ConsumerID`     | SSI FCData API Consumer ID     |
 | `ConsumerSecret` | SSI FCData API Consumer Secret |
 
 ## REST API Reference
@@ -71,22 +71,22 @@ token, err := fcClient.Login(consumerID, consumerSecret)
 
 ### Market Data Endpoints
 
-| Method | Description |
-|--------|-------------|
-| `GetSecuritiesList(market, pageIndex, pageSize)` | Get list of securities |
-| `GetSecuritiesDetails(market, symbol, pageIndex, pageSize)` | Get security details |
-| `GetIndexList(exchange, pageIndex, pageSize)` | Get list of indices |
-| `GetIndexComponents(indexCode, pageIndex, pageSize)` | Get index components |
-| `GetDailyOhlc(symbol, fromDate, toDate, pageIndex, pageSize, ascending)` | Get daily OHLC data |
+| Method                                                                      | Description            |
+| --------------------------------------------------------------------------- | ---------------------- |
+| `GetSecuritiesList(market, pageIndex, pageSize)`                            | Get list of securities |
+| `GetSecuritiesDetails(market, symbol, pageIndex, pageSize)`                 | Get security details   |
+| `GetIndexList(exchange, pageIndex, pageSize)`                               | Get list of indices    |
+| `GetIndexComponents(indexCode, pageIndex, pageSize)`                        | Get index components   |
+| `GetDailyOhlc(symbol, fromDate, toDate, pageIndex, pageSize, ascending)`    | Get daily OHLC data    |
 | `GetIntradayOhlc(symbol, fromDate, toDate, pageIndex, pageSize, ascending)` | Get intraday OHLC data |
-| `GetDailyIndex(indexId, fromDate, toDate, pageIndex, pageSize, ascending)` | Get daily index data |
+| `GetDailyIndex(indexId, fromDate, toDate, pageIndex, pageSize, ascending)`  | Get daily index data   |
 | `GetDailyStockPrice(symbol, market, fromDate, toDate, pageIndex, pageSize)` | Get daily stock prices |
 
 ## Real-Time Streaming (SignalR)
 
 ```go
-import "github.com/kyimmQ/go_fcdata/signalr"
-import "github.com/kyimmQ/go_fcdata/models"
+import "github.com/kyimmQ/go-fcdata/signalr"
+import "github.com/kyimmQ/go-fcdata/models"
 
 // Create SignalR client
 streamClient := signalr.NewClient("https://fc-datahub.ssi.com.vn/v2.0/signalr", token)

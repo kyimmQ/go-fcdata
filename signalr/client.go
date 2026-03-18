@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/gorilla/websocket"
-	"github.com/kyimmQ/go_fcdata/models"
+	"github.com/kyimmQ/go-fcdata/models"
 )
 
 const (

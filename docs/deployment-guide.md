@@ -9,11 +9,14 @@ This guide covers deployment considerations for applications using go-fcdata.
 ## Prerequisites
 
 ### Environment Requirements
+
 - Go 1.24.3 or later
 - Internet access to FCData API endpoints
 
 ### API Credentials
+
 You must obtain credentials from SSI:
+
 - **Consumer ID**: Your API consumer identifier
 - **Consumer Secret**: Your API secret key
 
@@ -26,16 +29,16 @@ You must obtain credentials from SSI:
 Add to your project:
 
 ```bash
-go get github.com/kyimmQ/go_fcdata
+go get github.com/kyimmQ/go-fcdata
 ```
 
 Or in your Go code:
 
 ```go
 import (
-    "github.com/kyimmQ/go_fcdata/client"
-    "github.com/kyimmQ/go_fcdata/signalr"
-    "github.com/kyimmQ/go_fcdata/models"
+    "github.com/kyimmQ/go-fcdata/client"
+    "github.com/kyimmQ/go-fcdata/signalr"
+    "github.com/kyimmQ/go-fcdata/models"
 )
 ```
 
@@ -92,7 +95,7 @@ import (
     "fmt"
     "os"
 
-    "github.com/kyimmQ/go_fcdata/client"
+    "github.com/kyimmQ/go-fcdata/client"
 )
 
 func main() {
@@ -131,9 +134,9 @@ import (
     "os/signal"
     "syscall"
 
-    "github.com/kyimmQ/go_fcdata/client"
-    "github.com/kyimmQ/go_fcdata/signalr"
-    "github.com/kyimmQ/go_fcdata/models"
+    "github.com/kyimmQ/go-fcdata/client"
+    "github.com/kyimmQ/go-fcdata/signalr"
+    "github.com/kyimmQ/go-fcdata/models"
 )
 
 func main() {
@@ -277,13 +280,13 @@ Track error rates:
 
 ### Common Issues
 
-| Issue | Solution |
-|-------|----------|
-| Login fails | Check ConsumerID and ConsumerSecret |
-| 401 Unauthorized | Token expired, re-authenticate |
-| 429 Too Many Requests | Implement rate limiting |
-| Connection timeout | Check network, increase timeout |
-| SignalR disconnect | Implement reconnection logic |
+| Issue                 | Solution                            |
+| --------------------- | ----------------------------------- |
+| Login fails           | Check ConsumerID and ConsumerSecret |
+| 401 Unauthorized      | Token expired, re-authenticate      |
+| 429 Too Many Requests | Implement rate limiting             |
+| Connection timeout    | Check network, increase timeout     |
+| SignalR disconnect    | Implement reconnection logic        |
 
 ### Debug Mode
 
@@ -332,14 +335,14 @@ CMD ["./main"]
 apiDeployment:
 spec:
   containers:
-  - name: app
-    image: your-app:latest
-    env:
-    - name: ConsumerID
-      valueFrom:
-        secretKeyRef:
-          name: fcdata-credentials
-          key: consumer-id
+    - name: app
+      image: your-app:latest
+      env:
+        - name: ConsumerID
+          valueFrom:
+            secretKeyRef:
+              name: fcdata-credentials
+              key: consumer-id
 ```
 
 ---
@@ -367,5 +370,6 @@ ConsumerID=xxx ConsumerSecret=xxx go test -tags=integration ./...
 ## Support
 
 For issues and questions:
-- GitHub Issues: https://github.com/kyimmQ/go_fcdata/issues
+
+- GitHub Issues: https://github.com/kyimmQ/go-fcdata/issues
 - SSI FCData API Support: https://fc-data.ssi.com.vn/

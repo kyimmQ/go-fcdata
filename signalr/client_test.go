@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kyimmQ/go_fcdata/client"
-	"github.com/kyimmQ/go_fcdata/models"
+	"github.com/kyimmQ/go-fcdata/client"
+	"github.com/kyimmQ/go-fcdata/models"
 )
 
 func getTestCredentials(t *testing.T) (string, string) {

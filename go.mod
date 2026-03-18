@@ -1,4 +1,4 @@
-module github.com/kyimmQ/go_fcdata
+module github.com/kyimmQ/go-fcdata
 
 go 1.24.3
 
