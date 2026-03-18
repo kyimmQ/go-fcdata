@@ -54,7 +54,7 @@ func main() {
 	streamClient.OnConnected = func() {
 		fmt.Println("SignalR Connected!")
 		// Subscribe to a few channels
-		streamClient.SwitchChannel("X-QUOTE:41I1G3000")
+		streamClient.SwitchChannel("X-TRADE:41I1G3000")
 	}
 
 	streamClient.OnData = func(msg models.BroadcastMessage) {

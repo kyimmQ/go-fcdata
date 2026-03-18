@@ -1,6 +1,9 @@
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // REST Models
 
@@ -194,43 +197,45 @@ type XTradeData struct {
 type BroadcastMessage struct {
 	DataType string      `json:"DataType"`
 	Content  string      `json:"Content"`           // Raw JSON string
-	Data     interface{} `json:"-"`                 // Unmarshalted content (XQuoteData, XTradeData, etc.)
+	Data     interface{} `json:"-"`                // Unmarshalled content (XQuoteData, XTradeData, etc.)
 }
 
 // UnmarshalJSON implements custom unmarshaling for BroadcastMessage
 func (b *BroadcastMessage) UnmarshalJSON(data []byte) error {
-	type Alias BroadcastMessage
-	aux := &struct {
-		Content json.RawMessage `json:"Content"`
-		*Alias
-	}{
-		Alias: (*Alias)(b),
-	}
-
-	if err := json.Unmarshal(data, &aux); err != nil {
+	// First, unmarshal into a map to extract DataType
+	var tmp map[string]interface{}
+	if err := json.Unmarshal(data, &tmp); err != nil {
 		return err
 	}
 
-	// Store raw content
-	b.Content = string(aux.Content)
+	// Extract DataType
+	if dt, ok := tmp["DataType"].(string); ok {
+		b.DataType = dt
+	}
 
-	// Unmarshal content based on DataType
-	switch b.DataType {
-	case "X-QUOTE":
-		var quoteData XQuoteData
-		if err := json.Unmarshal(aux.Content, &quoteData); err != nil {
-			return err
+	// Extract Content
+	if content, ok := tmp["Content"].(string); ok {
+		b.Content = content
+
+		// Unmarshal content based on DataType
+		contentBytes := []byte(content)
+		switch b.DataType {
+		case "X-QUOTE":
+			var quoteData XQuoteData
+			if err := json.Unmarshal(contentBytes, &quoteData); err != nil {
+				return fmt.Errorf("failed to unmarshal X-QUOTE: %w", err)
+			}
+			b.Data = quoteData
+		case "X-TRADE":
+			var tradeData XTradeData
+			if err := json.Unmarshal(contentBytes, &tradeData); err != nil {
+				return fmt.Errorf("failed to unmarshal X-TRADE: %w", err)
+			}
+			b.Data = tradeData
+		default:
+			// For unknown types, keep as raw string
+			b.Data = content
 		}
-		b.Data = quoteData
-	case "X-TRADE":
-		var tradeData XTradeData
-		if err := json.Unmarshal(aux.Content, &tradeData); err != nil {
-			return err
-		}
-		b.Data = tradeData
-	default:
-		// For unknown types, keep as raw string
-		b.Data = string(aux.Content)
 	}
 
 	return nil
