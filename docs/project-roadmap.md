@@ -42,10 +42,10 @@ This document outlines the development roadmap for go-fcdata, including current 
 ### v1.2.0 - SignalR Enhancements
 **Target**: Q3 2026
 
+- [x] Subscribe/unsubscribe methods (helper methods added)
+- [x] Multiple channel support
 - [ ] Automatic reconnection on disconnect
 - [ ] Connection state management (connected, connecting, disconnected)
-- [ ] Subscribe/unsubscribe methods
-- [ ] Multiple channel support
 - [ ] Heartbeat/ping-pong handling
 
 ### v1.3.0 - Developer Experience
@@ -83,6 +83,7 @@ This document outlines the development roadmap for go-fcdata, including current 
 | Reconnection | Automatic SignalR reconnection | Planned |
 | Typed OHLC | Numeric types instead of strings | Planned |
 | Logging | Request/response logging middleware | Planned |
+| Typed Subscription Helpers | Type-safe subscription methods | Completed |
 
 ### Low Priority
 | Feature | Description | Status |

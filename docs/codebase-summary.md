@@ -71,6 +71,19 @@ The `signalr` package provides WebSocket-based real-time data streaming.
 - `OnConnected func()`: Connection established handler
 - `OnError func(error)`: Error handler
 
+**Subscription Helper Methods:**
+
+| Method                   | Channel    | Description                  |
+| ------------------------ | ---------- | ---------------------------- |
+| `SubscribeSecurityStatus` | `F:`      | Subscribe to securities status |
+| `SubscribeQuote`          | `X-QUOTE:` | Subscribe to best bid/ask   |
+| `SubscribeTrade`          | `X-TRADE:` | Subscribe to matched trades |
+| `SubscribeSnapshot`       | `X:`       | Subscribe to snapshot data  |
+| `SubscribeOHLCV`         | `B:`       | Subscribe to OHLCV data     |
+| `SubscribeForeignRoom`   | `R:`       | Subscribe to foreign room   |
+| `SubscribeIndex`         | `MI:`      | Subscribe to index data     |
+| `SubscribeOddLot`       | `OL:`      | Subscribe to odd lot data   |
+
 ### `models/` Package
 
 Shared data structures for REST API and SignalR communication.
@@ -87,9 +100,17 @@ Shared data structures for REST API and SignalR communication.
 
 #### Streaming Models
 
-- `BroadcastMessage`: Real-time message with DataType and Content
+- `BroadcastMessage`: Real-time message with DataType and Content (supports auto-unmarshaling)
 - `NegotiationResponse`: SignalR handshake response
 - `SignalRMessage` / `HubMessage`: SignalR protocol messages
+- `XQuoteData`: Order book data (X-QUOTE)
+- `XTradeData`: Trade execution data (X-TRADE)
+- `FData`: Securities status (F)
+- `XSnapshotData`: Snapshot data (X)
+- `BData`: OHLCV data (B)
+- `RData`: Foreign room data (R)
+- `MIData`: Index data (MI)
+- `OLData`: Odd lot data (OL)
 
 ### `example/` Package
 
@@ -153,19 +174,21 @@ go-fcdata/
 ├── .env                            # Environment variables (example)
 ├── .gitignore                      # Git ignore patterns
 ├── client/
-│   ├── fcdata.go                   # Core client (89 lines)
-│   ├── auth.go                     # Authentication (29 lines)
-│   ├── endpoints.go                # API endpoints (145 lines)
-│   ├── debug.go                    # Debug helpers (36 lines)
+│   ├── fcdata.go                   # Core client
+│   ├── auth.go                     # Authentication
+│   ├── endpoints.go                # API endpoints
+│   ├── debug.go                    # Debug helpers
 │   ├── client_test.go              # Client tests
-│   └── endpoints_debug_test.go     # Endpoint tests
+│   └── endpoints_debug_test.go    # Endpoint tests
 ├── signalr/
-│   ├── client.go                   # SignalR client (262 lines)
-│   └── client_test.go              # SignalR tests
+│   ├── client.go                   # SignalR client with subscription helpers
+│   ├── client_test.go              # SignalR tests
+│   └── debug_test.go              # Debug tests
 ├── models/
-│   └── models.go                   # Data models (146 lines)
+│   ├── models.go                   # Data models
+│   └── models_test.go              # Models tests
 ├── example/
-│   └── main.go                     # Example application (73 lines)
+│   └── main.go                     # Example application
 └── docs/                           # Documentation
     └── *.md                        # Various documentation files
 ```

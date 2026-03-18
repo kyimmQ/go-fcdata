@@ -269,3 +269,43 @@ func (c *Client) Close() error {
 	}
 	return nil
 }
+
+// SubscribeSecurityStatus subscribes to securities status (F)
+func (c *Client) SubscribeSecurityStatus(symbols []string) error {
+	return c.SwitchChannel("F:" + strings.Join(symbols, "-"))
+}
+
+// SubscribeQuote subscribes to best bid/ask (X-QUOTE)
+func (c *Client) SubscribeQuote(symbols []string) error {
+	return c.SwitchChannel("X-QUOTE:" + strings.Join(symbols, "-"))
+}
+
+// SubscribeTrade subscribes to matched volume and price (X-TRADE)
+func (c *Client) SubscribeTrade(symbols []string) error {
+	return c.SwitchChannel("X-TRADE:" + strings.Join(symbols, "-"))
+}
+
+// SubscribeSnapshot subscribes to snapshot (X)
+func (c *Client) SubscribeSnapshot(symbols []string) error {
+	return c.SwitchChannel("X:" + strings.Join(symbols, "-"))
+}
+
+// SubscribeOHLCV subscribes to OHLCV (B)
+func (c *Client) SubscribeOHLCV(symbols []string) error {
+	return c.SwitchChannel("B:" + strings.Join(symbols, "-"))
+}
+
+// SubscribeForeignRoom subscribes to foreign room (R)
+func (c *Client) SubscribeForeignRoom(symbols []string) error {
+	return c.SwitchChannel("R:" + strings.Join(symbols, "-"))
+}
+
+// SubscribeIndex subscribes to index (MI)
+func (c *Client) SubscribeIndex(indexes []string) error {
+	return c.SwitchChannel("MI:" + strings.Join(indexes, "-"))
+}
+
+// SubscribeOddLot subscribes to odd lot (OL)
+func (c *Client) SubscribeOddLot(symbols []string) error {
+	return c.SwitchChannel("OL:" + strings.Join(symbols, "-"))
+}

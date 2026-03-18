@@ -148,10 +148,18 @@ Body: { "consumerID": "...", "consumerSecret": "..." }
 
 ### Streaming
 
-- `BroadcastMessage` - Real-time data message
+- `BroadcastMessage` - Real-time data message (with auto-unmarshaling)
 - `NegotiationResponse` - SignalR connection details
 - `SignalRMessage` - SignalR protocol message
 - `HubMessage` - Hub method invocation
+- `XQuoteData` - Order book data (X-QUOTE)
+- `XTradeData` - Trade execution data (X-TRADE)
+- `FData` - Securities status (F)
+- `XSnapshotData` - Snapshot data (X)
+- `BData` - OHLCV data (B)
+- `RData` - Foreign room data (R)
+- `MIData` - Index data (MI)
+- `OLData` - Odd lot data (OL)
 
 ---
 

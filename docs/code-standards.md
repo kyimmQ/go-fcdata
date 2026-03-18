@@ -191,9 +191,10 @@ type Client struct {
 ### Test File Naming
 
 ```
-client_test.go       -> tests for client package
-endpoints_debug_test.go -> endpoint debug tests
-signalr/client_test.go -> signalr client tests
+client_test.go            -> tests for client package
+endpoints_debug_test.go   -> endpoint debug tests
+signalr/client_test.go   -> signalr client tests
+models/models_test.go     -> models tests
 ```
 
 ### Test Functions

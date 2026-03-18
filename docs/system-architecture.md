@@ -64,14 +64,14 @@ Response<T> <---------- JSON
 
 ```
 signalr/
-└── client.go    WebSocket client with SignalR protocol
+└── client.go    WebSocket client with SignalR protocol and subscription helpers
 ```
 
 **Responsibilities:**
 - SignalR protocol handshake (negotiate, connect, start)
 - WebSocket connection management
 - Message parsing and dispatching
-- Channel subscription
+- Channel subscription (generic and typed helpers)
 
 **Connection Flow:**
 ```
@@ -210,6 +210,35 @@ OnData callback invoked
 | `/start` | GET | Start session |
 | Hub: `FcMarketDataV2Hub` | | |
 | - `SwitchChannels` | Invoke | Subscribe to channels |
+
+#### Subscription Channels
+
+| Channel    | Data Type | Description |
+|------------|-----------|-------------|
+| `F:{symbols}` | Securities Status | Trading status (HALT, OPEN, etc.) |
+| `X-QUOTE:{symbols}` | Order Book | Best 10 bid/ask prices and volumes |
+| `X-TRADE:{symbols}` | Trade Execution | Matched trades with price and volume |
+| `X:{symbols}` | Snapshot | Full market snapshot (OHLCV + order book) |
+| `B:{symbols}` | OHLCV | Bar/Candlestick data |
+| `R:{symbols}` | Foreign Room | Foreign investor trading activity |
+| `MI:{indexes}` | Index | Index values (VN30, VN100, etc.) |
+| `OL:{symbols}` | Odd Lot | Odd lot trading data |
+
+#### Subscription Helper Methods
+
+The SignalR client provides typed subscription methods:
+
+```go
+// Subscribe to different data types
+client.SubscribeSecurityStatus("SSI,VCB")  // F channel
+client.SubscribeQuote("SSI,VCB")           // X-QUOTE channel
+client.SubscribeTrade("SSI,VCB")            // X-TRADE channel
+client.SubscribeSnapshot("SSI,VCB")        // X channel
+client.SubscribeOHLCV("SSI,VCB")            // B channel
+client.SubscribeForeignRoom("SSI,VCB")      // R channel
+client.SubscribeIndex("VN30,VN100")         // MI channel
+client.SubscribeOddLot("SSI,VCB")           // OL channel
+```
 
 ---
 
