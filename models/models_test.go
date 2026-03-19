@@ -107,3 +107,33 @@ func TestUnmarshalOLData(t *testing.T) {
 		t.Errorf("Expected LastPrice 22750, got %f", olData.LastPrice)
 	}
 }
+
+func TestUnmarshalXSnapshotDataWithNaN(t *testing.T) {
+	jsonStr := `{
+		"DataType": "X",
+		"Content": "{\"RType\":\"X\",\"TradingDate\":\"19/03/2026\",\"Time\":\"08:00:07\",\"Isin\":\"41I1G4000\",\"Symbol\":\"41I1G4000\",\"Ceiling\":2011.6,\"Floor\":1748.4,\"RefPrice\":1880.0,\"Open\":0.0,\"High\":0.0,\"Low\":0.0,\"Close\":0.0,\"AvgPrice\":\"NaN\",\"PriorVal\":1880.0,\"LastPrice\":0.0,\"LastVol\":0.0,\"TotalVal\":0.0,\"TotalVol\":0.0,\"BidPrice1\":0.0,\"BidPrice2\":0.0,\"BidPrice3\":0.0,\"BidPrice4\":0.0,\"BidPrice5\":0.0,\"BidPrice6\":0.0,\"BidPrice7\":0.0,\"BidPrice8\":0.0,\"BidPrice9\":0.0,\"BidPrice10\":0.0,\"BidVol1\":0.0,\"BidVol2\":0.0,\"BidVol3\":0.0,\"BidVol4\":0.0,\"BidVol5\":0.0,\"BidVol6\":0.0,\"BidVol7\":0.0,\"BidVol8\":0.0,\"BidVol9\":0.0,\"BidVol10\":0.0,\"AskPrice1\":0.0,\"AskPrice2\":0.0,\"AskPrice3\":0.0,\"AskPrice4\":0.0,\"AskPrice5\":0.0,\"AskPrice6\":0.0,\"AskPrice7\":0.0,\"AskPrice8\":0.0,\"AskPrice9\":0.0,\"AskPrice10\":0.0,\"AskVol1\":0.0,\"AskVol2\":0.0,\"AskVol3\":0.0,\"AskVol4\":0.0,\"AskVol5\":0.0,\"AskVol6\":0.0,\"AskVol7\":0.0,\"AskVol8\":0.0,\"AskVol9\":0.0,\"AskVol10\":0.0,\"MarketId\":\"DERIVATIVES\",\"Exchange\":\"DERIVATIVES\",\"TradingSession\":\"C\",\"TradingStatus\":\"Normal\",\"Change\":-1880.0,\"RatioChange\":-100.0,\"EstMatchedPrice\":0.0,\"Side\":null,\"CloseQtty\":0.0}"
+	}`
+
+	var msg BroadcastMessage
+	if err := json.Unmarshal([]byte(jsonStr), &msg); err != nil {
+		t.Fatalf("Failed to unmarshal: %v", err)
+	}
+
+	if msg.DataType != "X" {
+		t.Errorf("Expected DataType 'X', got '%s'", msg.DataType)
+	}
+
+	xData, ok := msg.Data.(XSnapshotData)
+	if !ok {
+		t.Fatalf("Expected XSnapshotData, got %T", msg.Data)
+	}
+
+	if xData.Symbol != "41I1G4000" {
+		t.Errorf("Expected Symbol '41I1G4000', got '%s'", xData.Symbol)
+	}
+
+	// Check that AvgPrice defaults to 0.0 when "NaN" is received
+	if xData.AvgPrice != 0.0 {
+		t.Errorf("Expected AvgPrice 0.0, got %f", xData.AvgPrice)
+	}
+}
