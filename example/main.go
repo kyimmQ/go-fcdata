@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"syscall"
+	"time"
 
 	"github.com/joho/godotenv"
 	"github.com/kyimmQ/go-fcdata/client"
@@ -90,10 +91,10 @@ func main() {
 	}
 
 	streamClient.OnError = func(err error) {
-		fmt.Printf("STREAM ERROR -> %v\n", err)
+		fmt.Printf("STREAM ERROR -> %v at %s\n", err, time.Now().Format("2006-01-02 15:04:05"))
 	}
 
-	fmt.Println("Starting stream client...")
+	fmt.Println("Starting stream client at", time.Now().Format("2006-01-02 15:04:05"))
 	if err := streamClient.StartWithLoop(); err != nil {
 		fmt.Printf("Stream client failed to start: %v\n", err)
 		return

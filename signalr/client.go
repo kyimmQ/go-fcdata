@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/kyimmQ/go-fcdata/models"
@@ -20,14 +21,16 @@ const (
 
 // Client handles the SignalR connection to FCData Hub.
 type Client struct {
-	BaseURL     string
-	Token       string
-	Conn        *websocket.Conn
-	mu          sync.Mutex
-	messageID   int
-	connected   bool
-	hubData     string // JSON encoded array of hub names, e.g., [{"name": "fcmarketdatav2hub"}]
-	connToken   string
+	BaseURL      string
+	Token        string
+	Conn         *websocket.Conn
+	mu           sync.RWMutex
+	messageID    int
+	connected    bool
+	hubData      string // JSON encoded array of hub names, e.g., [{"name": "fcmarketdatav2hub"}]
+	connToken    string
+	pingInterval time.Duration
+	stopPing     chan struct{}
 
 	OnData      func(models.BroadcastMessage)
 	OnConnected func()
@@ -36,9 +39,10 @@ type Client struct {
 
 func NewClient(baseURL, token string) *Client {
 	return &Client{
-		BaseURL: baseURL,
-		Token:   token,
-		hubData: `[{"name":"fcmarketdatav2hub"}]`,
+		BaseURL:      baseURL,
+		Token:        token,
+		hubData:      `[{"name":"fcmarketdatav2hub"}]`,
+		pingInterval: 30 * time.Second,
 	}
 }
 
@@ -175,7 +179,7 @@ func (c *Client) readLoop() {
 		_, message, err := c.Conn.ReadMessage()
 		if err != nil {
 			if c.OnError != nil {
-				c.OnError(fmt.Errorf("read error: %w", err))
+				c.OnError(fmt.Errorf("read error: %w, message: %s", err, string(message)))
 			}
 			return
 		}
@@ -229,8 +233,34 @@ func (c *Client) StartWithLoop() error {
 	if err := c.Start(); err != nil {
 		return err
 	}
+	c.stopPing = make(chan struct{})
 	go c.readLoop()
+	go c.pingLoop()
 	return nil
+}
+
+func (c *Client) pingLoop() {
+	ticker := time.NewTicker(c.pingInterval)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			c.mu.Lock()
+			if c.connected && c.Conn != nil {
+				if err := c.Conn.WriteControl(websocket.PingMessage, []byte{}, time.Now().Add(5*time.Second)); err != nil {
+					c.mu.Unlock()
+					if c.OnError != nil {
+						c.OnError(fmt.Errorf("ping error: %w", err))
+					}
+					return
+				}
+			}
+			c.mu.Unlock()
+		case <-c.stopPing:
+			return
+		}
+	}
 }
 
 func (c *Client) Invoke(hub, method string, args ...interface{}) error {
@@ -264,6 +294,13 @@ func (c *Client) Close() error {
 		return nil
 	}
 	c.connected = false
+
+	// Signal pingLoop to stop
+	if c.stopPing != nil {
+		close(c.stopPing)
+		c.stopPing = nil
+	}
+
 	if c.Conn != nil {
 		return c.Conn.Close()
 	}
